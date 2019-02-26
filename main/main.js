@@ -4,7 +4,7 @@ module.exports = function printInventory(inputs) {
     let ItemJson=GetInput(inputs);
     let CostJson=CalcCost(ItemJson);
     let ResultString=PrintResult(ItemJson,CostJson);
-    //console.log(ResultString);
+    console.log(ResultString);
     return 'Hello World!';
 };
 
@@ -73,6 +73,7 @@ function CalcCost(itemJson){
                 let costItem = {};
                 costItem.name=itemJson[i].name;
                 costItem.price=itemJson[i].price;;
+                costItem.unit=itemJson[i].unit;
                 costItem.num=discountNum;
                 costJson.push(costItem);
             }
@@ -91,8 +92,8 @@ function PrintResult(itemJson,costJson){
     resultString+='***<没钱赚商店>购物清单***\n';
     for(let i in itemJson)
     {
-        allCost+=itemJson[i].num*itemJson[i].price;
-        let Str='名称：'+itemJson[i].name+'，数量： '+itemJson[i].num+itemJson[i].unit+'，单价：'+itemJson[i].price.toFixed(2)+'(元)，小计：'+itemJson[i].total.toFixed(2)+'(元)\n';
+        allCost+=itemJson[i].total;
+        let Str='名称：'+itemJson[i].name+'，数量：'+itemJson[i].num+itemJson[i].unit+'，单价：'+itemJson[i].price.toFixed(2)+'(元)，小计：'+itemJson[i].total.toFixed(2)+'(元)\n';
         resultString+=Str;
     }
     resultString+='----------------------\n';
@@ -101,8 +102,9 @@ function PrintResult(itemJson,costJson){
         resultString+='挥泪赠送商品：\n';
         for (let j in costJson)
         {
-            discountCost+=costJson[j].num*costJson[j].price[j];
-            let Str2='名称：'+costJson[j].name+'，数量： '+costJson[j].num+costJson[j].unit+'\n';
+
+            discountCost+=costJson[j].num*costJson[j].price;
+            let Str2='名称：'+costJson[j].name+'，数量：'+costJson[j].num+costJson[j].unit+'\n';
             resultString+=Str2;
         }
         resultString+='----------------------\n';
@@ -111,6 +113,6 @@ function PrintResult(itemJson,costJson){
 
     resultString+='总计：'+allCost.toFixed(2)+'(元)\n';
     resultString+='节省：'+discountCost.toFixed(2)+'(元)\n';
-    resultString+='===================================';
+    resultString+='**********************';
     return resultString;
 }
