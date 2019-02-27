@@ -12,12 +12,11 @@ function GetInput(inputArray){
     let itemJson=[];
     let ItemInfo=loadAllItems();
     let insideFlag=0;
-    //console.log(itemJson)
     for(let index in inputArray)
     {
         let itemBarcode='';
         let itemNum=0;
-        if(inputArray[index].indexOf('-')!==-1)
+        if(inputArray[index].indexOf('-')!==-1)   //对称重商品进行barcode与num提取
         {
             itemBarcode=inputArray[index].split('-')[0];
             itemNum=parseInt(inputArray[index].split('-')[1]);
@@ -27,14 +26,14 @@ function GetInput(inputArray){
             itemBarcode=inputArray[index];
             itemNum=1;
         }
-
+        //若当前barcode信息已近记录在输出结果中，对相应商品数量增加
         itemJson.forEach(item=>{
-            if(item.barcode==itemBarcode){item.num+=itemNum;insideFlag=1;}
+            if(item.barcode==itemBarcode){ item.num+=itemNum;insideFlag=1;}
         })
 
         if(insideFlag==1)
         {   insideFlag=0;}
-        else
+        else    //若当前barcode信息未记录在输出结果中，则增加商品信息
         {
             for(let i in ItemInfo)
             {
@@ -64,12 +63,12 @@ function CalcCost(itemJson){
 
     for(let i in itemJson)
     {
-        if(PromotionItem.indexOf(itemJson[i].barcode)>=0)
+        if(PromotionItem.indexOf(itemJson[i].barcode)>=0)  //判断购买商品是否属于折扣商品
         {
-            let discountNum=Math.floor(itemJson[i].num/3);
+            let discountNum=Math.floor(itemJson[i].num/3);  //计算折扣数量
             if(discountNum>0)
             {
-                itemJson[i].total=(itemJson[i].num-discountNum)*itemJson[i].price;
+                itemJson[i].total=(itemJson[i].num-discountNum)*itemJson[i].price;   //计算每项购买商品的小计信息，记录赠送的商品信息
                 let costItem = {};
                 costItem.name=itemJson[i].name;
                 costItem.price=itemJson[i].price;;

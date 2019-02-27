@@ -1,3 +1,82 @@
+### POS系统程序结构分析
+
+分析任务的需求，可以发现该任务可以分为3大块来处理：
+
+1. 输入信息处理
+2. 商品结算
+3. 输出字符串整合
+
+#### 程序的管道图如下：
+
+![](pic1.png)
+
+1. 输入信息处理过程通过输入的字符矩阵以及loadAllItems获取输入商品的条码，名称，单位，价格等信息，对重复商品做数量累加，输出上述信息的JSON格式。
+2. 商品结算阶段通过loadPromotions获取所有商品的折扣，计算折后商品的名称，数量，并计算小计信息。
+3. 根据所买商品的信息及折扣信息输出格式化的字符串。
+
+#### 任务分解
+
+```javascript
+#GetInput()输入数据处理
+输入：
+	Inputs；Array
+    ItemsInfo[{
+    	barcode: String,
+   		name: String,
+        unit:String,
+    	price: Number
+  }]
+输出：
+	ItemJson[{
+    	barcode: String,
+   		name: String,
+        unit:String,
+        num:Number,
+    	price: Number,
+        total:Number
+	}]
+#CalcCost()商品结算
+输入：
+	ItemJson[{
+    	barcode: String,
+   		name: String,
+        unit:String,
+        num:Number,
+    	price: Number,
+        total:Number
+	}]
+	Promotions[{
+    	type: String,
+    	barcodes: Array
+  	}]
+输出：
+	CostJson[{
+    	name:String,
+        price:Number,
+        unit:Number
+        num:Number
+	}]
+#PrintString()输出字符串整合
+输入：
+	ItemJson[{
+    	barcode: String,
+   		name: String,
+        unit:String,
+        num:Number,
+    	price: Number,
+        total:Number
+	}]
+	CostJson[{
+    	name:String,
+        price:Number,
+        unit:Number
+        num:Number
+	}]
+输出：ResultString：String
+```
+以下为原内容
+------------------------------------------------------------------------------------------------------------------------
+
 # POS Project v1
 
 POS收银机 版本：v1
